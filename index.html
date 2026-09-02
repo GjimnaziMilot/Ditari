@@ -189,8 +189,8 @@
         const subjectSelector = document.getElementById('subjectSelector');
         const topicInput = document.getElementById('topicInput');
 
-        // Çelësi yt më i fundit i API-së nga Google AI Studio
-        const GEMINI_API_KEY = "AQ.Ab8RN6K5YQXFC-g7FaN7wnrh8xf-flYiRD30WSPq-WM6g_JLjA";
+        // VENDOS ÇELËSIN TËND TË API-së KËTU
+        const GEMINI_API_KEY = "VENDOS_ÇELËSIN_KËTU";
 
         function clearDocument() {
             document.getElementById('lblClass').textContent = "-";
@@ -211,8 +211,8 @@
         }
 
         async function generateWithGemini() {
-            if (!GEMINI_API_KEY) {
-                alert("Vendos API key te variabla GEMINI_API_KEY.");
+            if (!GEMINI_API_KEY || GEMINI_API_KEY === "VENDOS_ÇELËSIN_KËTU") {
+                alert("Të lutem vendos API key të vlefshëm te variabla GEMINI_API_KEY në kod.");
                 return;
             }
 
@@ -253,14 +253,14 @@ parashikimi, ndertimi, perforcimi, evaluation, homework.
 `;
 
             try {
+                // Kërkesë e pastër vetëm me parametrin ?key= 
+                // Pa shtuar headers shtesë që shkaktojnë gabime OAuth
                 const response = await fetch(
-                    "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent",
+                    "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + GEMINI_API_KEY,
                     {
                         method: "POST",
                         headers: { 
-                            "Content-Type": "application/json",
-                            "x-goog-api-key": GEMINI_API_KEY,
-                            "Authorization": `Bearer ${GEMINI_API_KEY}`
+                            "Content-Type": "application/json"
                         },
                         body: JSON.stringify({
                             contents: [{ parts: [{ text: prompt }] }],
