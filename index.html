@@ -3,304 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ditar Mësimor - Kimi | Gjimnazi Milot</title>
+    <title>Sistemi i Ditarit - Kimi | Gjimnazi Milot</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
         
-        /* Rregullat për Printim dhe PDF */
-        @media print {
-            .no-print { display: none !important; }
-            body { background: white; color: black; margin: 0; padding: 0; }
-            .print-area { 
-                border: none !important; 
-                box-shadow: none !important; 
-                margin: 0 !important; 
-                padding: 0 !important;
-                width: 100% !important; 
-                max-width: 100% !important;
-            }
-            * {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-            @page { margin: 1cm; size: A4; }
+        /* Sigurohemi që faqja të zërë gjithë ekranin */
+        body, html { 
+            font-family: 'Inter', sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            height: 100%; 
+            display: flex; 
+            flex-direction: column; 
+            overflow: hidden; /* Fshehim scroll-in e jashtëm për t'ia lënë aplikacionit */
+        }
+        
+        /* Iframe do të mbushë gjithë hapësirën e mbetur */
+        iframe { 
+            flex-grow: 1; 
+            border: none; 
+            width: 100%; 
+            height: 100%; 
         }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
+<body class="bg-slate-100 text-slate-800">
 
-    <!-- Top Bar Controls (Fshihet gjatë printimit) -->
-    <header class="no-print bg-slate-900 text-white py-4 px-6 shadow-md border-b-4 border-emerald-600">
-        <div class="max-w-7xl mx-auto flex flex-col space-y-4">
-            <div class="flex justify-between items-center">
-                <div>
-                    <h1 class="text-xl font-bold flex items-center gap-2">
-                        <i class="fa-solid fa-file-pen text-emerald-400"></i> Sistemi i Gjenerimit të Ditarit Mësimor
-                    </h1>
-                    <p class="text-xs text-slate-400 mt-1">Struktura ERR sipas standardeve të MAS</p>
-                </div>
-                <div class="flex gap-2">
-                    <button onclick="generateWithGemini()" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm px-4 py-2.5 rounded-lg flex items-center gap-2 transition shadow">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i> Gjenero me Gemini
-                    </button>
-                    <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm px-5 py-2.5 rounded-lg flex items-center gap-2 transition shadow">
-                        <i class="fa-solid fa-file-pdf"></i> Printo / Ruaj si PDF
-                    </button>
-                </div>
+    <!-- Koka e faqes (Identiteti i Shkollës) -->
+    <header class="bg-slate-900 text-white py-4 px-6 shadow-md border-b-4 border-emerald-600 z-10">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-xl font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-school text-emerald-400"></i> Gjimnazi Milot
+                </h1>
+                <p class="text-xs text-slate-400 mt-1">Sistemi i Gjenerimit të Ditarit Mësimor me AI</p>
             </div>
             
-            <!-- Filtrat -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-slate-800 p-3 rounded-lg border border-slate-700">
-                <div class="flex flex-col">
-                    <label class="text-[10px] text-slate-400 uppercase font-bold mb-1">Zgjidh Klasën</label>
-                    <select id="classSelector" class="bg-slate-700 text-white text-sm border border-slate-600 rounded-md px-3 py-2 focus:ring-2 focus:ring-emerald-500 outline-none">
-                        <option value="10">Klasa 10</option>
-                        <option value="11">Klasa 11</option>
-                        <option value="12">Klasa 12</option>
-                    </select>
-                </div>
-                <div class="flex flex-col">
-                    <label class="text-[10px] text-slate-400 uppercase font-bold mb-1">Zgjidh Lëndën</label>
-                    <select id="subjectSelector" class="bg-slate-700 text-white text-sm border border-slate-600 rounded-md px-3 py-2 focus:ring-2 focus:ring-emerald-500 outline-none">
-                        <option value="Kimi 10">Kimi 10</option>
-                        <option value="Kimi 11">Kimi 11</option>
-                        <option value="Kimi 12">Kimi 12</option>
-                    </select>
-                </div>
-                <div class="flex flex-col">
-                    <label for="topicInput" class="text-[10px] text-slate-400 uppercase font-bold mb-1">Shkruaj Temën</label>
-                    <input id="topicInput" type="text" placeholder="p.sh. Acidet dhe bazat" class="bg-slate-700 text-white placeholder-slate-400 text-sm border border-slate-600 rounded-md px-3 py-2 focus:ring-2 focus:ring-emerald-500 outline-none">
-                </div>
+            <!-- Butoni që e hap aplikacionin në një dritare të re (Këshillohet për Printim PDF të pastër) -->
+            <div class="flex gap-2">
+                <a href="https://lovable.dev/projects/6911e129-c00d-432b-871d-572c2350b2d6?magic_link=mc_75e3ba84-f0dc-47bb-a60c-f15eab5c2526" target="_blank" rel="noopener noreferrer" class="bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm px-5 py-2.5 rounded-lg flex items-center gap-2 transition shadow">
+                    <i class="fa-solid fa-external-link-alt"></i> Hape për Printim
+                </a>
             </div>
         </div>
     </header>
 
-    <!-- Pjesa Zyrtare e Printueshme (Ditari) -->
-    <main class="flex-grow p-4 sm:p-8 flex justify-center">
-        <div class="print-area bg-white w-full max-w-4xl p-8 rounded-xl shadow-md border border-slate-200 text-slate-900 text-sm space-y-6">
-            
-            <!-- Koka e Dokumentit -->
-            <div class="border-b-2 border-slate-900 pb-4 text-center space-y-1">
-                <div class="flex justify-between items-center text-xs text-slate-500 uppercase font-semibold">
-                    <span>Gjimnazi Milot</span>
-                    <span>Viti Shkollor 2026-2027</span>
-                </div>
-                <h2 class="text-xl font-bold uppercase tracking-wide text-slate-900 pt-2">PLAN DITOR</h2>
-            </div>
+    <!-- Këtu integrohet aplikacioni yt i krijuar në Lovable -->
+    <!-- iframe lejon që një faqe tjetër web (Lovable) të shfaqet brenda faqes tënde -->
+    <iframe 
+        src="https://lovable.dev/projects/6911e129-c00d-432b-871d-572c2350b2d6?magic_link=mc_75e3ba84-f0dc-47bb-a60c-f15eab5c2526" 
+        allow="clipboard-write"
+        title="Gjeneratori i Ditarit Lovable">
+    </iframe>
 
-            <!-- Të Dhënat e Kurrikulës (Tabela Meta) -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-3 text-xs bg-slate-50 p-4 rounded-lg border border-slate-200">
-                <div><span class="font-bold block text-slate-500">FUSHA:</span> <span class="font-semibold text-slate-800">Shkencat e natyrës</span></div>
-                <div><span class="font-bold block text-slate-500">LËNDA:</span> <span id="lblSubject" class="font-semibold text-slate-800">Kimi</span></div>
-                <div><span class="font-bold block text-slate-500">SHKALLA:</span> <span id="lblScale" class="font-semibold text-slate-800">V</span></div>
-                <div><span class="font-bold block text-slate-500">KLASA:</span> <span id="lblClass" class="font-semibold text-slate-800">10</span></div>
-                
-                <div><span class="font-bold block text-slate-500">KOHA:</span> <span class="font-semibold text-slate-800">45 Minuta</span></div>
-                <div class="col-span-4 mt-1 pt-2 border-t border-slate-200"><span class="font-bold block text-slate-500">KAPITULLI:</span> <span id="lblChapter" class="font-semibold text-slate-800">-</span></div>
-            </div>
-
-            <!-- Tema Mësimore -->
-            <div class="bg-emerald-50 border-l-4 border-emerald-600 p-3 rounded-r-lg">
-                <span class="text-xs font-bold uppercase text-emerald-800 block">TEMA MËSIMORE:</span>
-                <h3 id="lblTopic" class="text-base font-bold text-slate-900"></h3>
-            </div>
-
-            <!-- Rubrikat kryesore -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-0 text-xs border border-slate-900">
-                <div class="border-b md:border-b-0 md:border-r border-slate-900 p-3 space-y-1.5">
-                    <h4 class="font-bold text-slate-800 flex items-center gap-1.5 border-b pb-1">
-                        <i class="fa-solid fa-bullseye text-emerald-600"></i> Rezultatet e të Nxënit (RN):
-                    </h4>
-                    <ul id="lblOutcomes" class="list-disc pl-4 space-y-1 text-slate-700"></ul>
-                </div>
-
-                <div class="p-3 space-y-3">
-                    <div>
-                        <h4 class="font-bold text-slate-800 border-b pb-1">SITUATA E PARASHIKUAR E TË NXËNIT:</h4>
-                        <p id="lblSituation" class="text-slate-700 pt-1 text-justify"></p>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-slate-800 border-b pb-1">LIDHJA ME FUSHAT E TJERA:</h4>
-                        <p id="lblConnections" class="text-slate-700 pt-1"></p>
-                    </div>
-                </div>
-                <div class="border-t md:border-r border-slate-900 p-3">
-                    <div>
-                        <h4 class="font-bold text-slate-800 border-b pb-1">FJALËT KYÇE:</h4>
-                        <p id="lblKeywords" class="text-slate-700 pt-1 font-medium"></p>
-                    </div>
-                </div>
-                <div class="border-t border-slate-900 p-3">
-                    <div>
-                        <h4 class="font-bold text-slate-800 border-b pb-1">BURIMET E INFORMACIONIT DHE MJETET:</h4>
-                        <p id="lblResources" class="text-slate-700 pt-1"></p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Metodologjia dhe veprimtaritë -->
-            <div class="border border-slate-900 text-xs">
-                <div class="p-3 border-b border-slate-900"><strong>METODOLOGJIA DHE VEPRIMTARITË E NXËNËSVE:</strong> <span id="lblMethodology"></span></div>
-                <div class="p-3 border-b border-slate-900"><strong>PARASHIKIMI (10 min):</strong> <span id="lblParashikimi"></span></div>
-                <div class="p-3 border-b border-slate-900"><strong>NDËRTIMI I NJOHURIVE (40 min):</strong> <span id="lblNdertimi"></span></div>
-                <div class="p-3"><strong>PËRFORCIMI (40 min):</strong> <span id="lblPerforcimi"></span></div>
-            </div>
-
-            <div class="text-xs">
-                <h4 class="font-bold text-center text-sky-600 mb-1">ANALIZIMI I TË DHËNAVE TË MARRA NGA EKSPERIMENTET</h4>
-                <table class="w-full border-collapse border border-slate-900 text-center">
-                    <thead>
-                        <tr>
-                            <th class="border border-slate-900 p-2">Nr. i eksperimentit</th>
-                            <th class="border border-slate-900 p-2">Titulli i eksperimentit</th>
-                            <th class="border border-slate-900 p-2">Qëllimi i eksperimentit</th>
-                            <th class="border border-slate-900 p-2">Mjetet e përdorura</th>
-                            <th class="border border-slate-900 p-2">Përfundime</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td class="border border-slate-900 p-4"></td><td class="border border-slate-900 p-4"></td><td class="border border-slate-900 p-4"></td><td class="border border-slate-900 p-4"></td><td class="border border-slate-900 p-4"></td></tr>
-                        <tr><td class="border border-slate-900 p-4"></td><td class="border border-slate-900 p-4"></td><td class="border border-slate-900 p-4"></td><td class="border border-slate-900 p-4"></td><td class="border border-slate-900 p-4"></td></tr>
-                        <tr><td class="border border-slate-900 p-4"></td><td class="border border-slate-900 p-4"></td><td class="border border-slate-900 p-4"></td><td class="border border-slate-900 p-4"></td><td class="border border-slate-900 p-4"></td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Vlerësimi & Detyrat -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs pt-2">
-                <div class="bg-slate-50 border border-slate-200 p-3 rounded-lg">
-                    <h4 class="font-bold text-slate-800 border-b pb-1 mb-1">VLERËSIMI I NXËNËSVE:</h4>
-                    <p id="lblEvaluation" class="text-slate-700 text-justify"></p>
-                </div>
-                <div class="bg-slate-50 border border-slate-200 p-3 rounded-lg">
-                    <h4 class="font-bold text-slate-800 border-b pb-1 mb-1">DETYRA E SHTËPISË / PUNA E PAVARUR:</h4>
-                    <p id="lblHomework" class="text-slate-700 text-justify"></p>
-                </div>
-            </div>
-
-        </div>
-    </main>
-
-    <script>
-        const classSelector = document.getElementById('classSelector');
-        const subjectSelector = document.getElementById('subjectSelector');
-        const topicInput = document.getElementById('topicInput');
-
-        // VENDOS ÇELËSIN TËND TË API-së KËTU
-        const GEMINI_API_KEY = "AQ.Ab8RN6KMzs-vwmBtrp7uClRwpKUUldTv6yq12MoL0QjAUQZdNg";
-
-        function clearDocument() {
-            document.getElementById('lblClass').textContent = "-";
-            document.getElementById('lblScale').textContent = "-";
-            document.getElementById('lblChapter').textContent = "-";
-            document.getElementById('lblTopic').textContent = "Shkruani një temë dhe klikoni Gjenero";
-            document.getElementById('lblOutcomes').innerHTML = "";
-            document.getElementById('lblKeywords').textContent = "";
-            document.getElementById('lblResources').textContent = "";
-            document.getElementById('lblSituation').textContent = "";
-            document.getElementById('lblConnections').textContent = "";
-            document.getElementById('lblMethodology').textContent = "";
-            document.getElementById('lblParashikimi').textContent = "";
-            document.getElementById('lblNdertimi').textContent = "";
-            document.getElementById('lblPerforcimi').textContent = "";
-            document.getElementById('lblEvaluation').textContent = "";
-            document.getElementById('lblHomework').textContent = "";
-        }
-
-        async function generateWithGemini() {
-            if (!GEMINI_API_KEY || GEMINI_API_KEY === "AQ.Ab8RN6KMzs-vwmBtrp7uClRwpKUUldTv6yq12MoL0QjAUQZdNg") {
-                alert("AQ.Ab8RN6KMzs-vwmBtrp7uClRwpKUUldTv6yq12MoL0QjAUQZdNg");
-                return;
-            }
-
-            const topic = topicInput.value.trim();
-            if (!topic) {
-                alert("Shkruani temën që dëshironi të gjeneroni.");
-                topicInput.focus();
-                return;
-            }
-
-            const btn = document.querySelector('button[onclick="generateWithGemini()"]');
-            const originalBtnText = btn.innerHTML;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Po Gjenerohet...';
-            btn.disabled = true;
-
-            const classLevel = classSelector.value;
-            const subject = subjectSelector.value;
-
-            document.getElementById('lblClass').textContent = classLevel;
-            document.getElementById('lblScale').textContent = classLevel === "12" ? "VI" : "V";
-            document.getElementById('lblSubject').textContent = subject;
-            document.getElementById('lblTopic').textContent = topic;
-            document.getElementById('lblChapter').textContent = "-";
-
-            const prompt = `
-Krijo nje plan ditor mesimor ne gjuhen shqipe per lenden e kimise.
-Klasa: ${classLevel}
-Lenda: ${subject}
-Tema: ${topic}
-
-Perfshi: rezultatet e te nxenit, situaten e te nxenit, fjalet kyce,
-burimet, lidhjen me fushat e tjera, metodologjine, parashikimin,
-ndertimin e njohurive, perforcimin, vleresimin dhe detyren e shtepise.
-
-Kthe vetem JSON me fushat:
-outcomes, situation, keywords, resources, connections, methodology,
-parashikimi, ndertimi, perforcimi, evaluation, homework.
-`;
-
-            try {
-                // Kërkesë e pastër vetëm me parametrin ?key= 
-                // Pa shtuar headers shtesë që shkaktojnë gabime OAuth
-                const response = await fetch(
-                    "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + GEMINI_API_KEY,
-                    {
-                        method: "POST",
-                        headers: { 
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            contents: [{ parts: [{ text: prompt }] }],
-                            generationConfig: {
-                                temperature: 0.7,
-                                responseMimeType: "application/json"
-                            }
-                        })
-                    }
-                );
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error("Gabimi i plotë nga Google:", errorData);
-                    throw new Error(`Gabim nga Google: ${errorData.error.message}`);
-                }
-
-                const result = await response.json();
-                const generated = JSON.parse(result.candidates[0].content.parts[0].text);
-
-                document.getElementById('lblOutcomes').innerHTML = generated.outcomes.map(item => `<li>${item}</li>`).join('');
-                document.getElementById('lblSituation').textContent = generated.situation;
-                document.getElementById('lblKeywords').textContent = generated.keywords;
-                document.getElementById('lblResources').textContent = generated.resources;
-                document.getElementById('lblConnections').textContent = generated.connections;
-                document.getElementById('lblMethodology').textContent = generated.methodology;
-                document.getElementById('lblParashikimi').innerHTML = generated.parashikimi;
-                document.getElementById('lblNdertimi').innerHTML = generated.ndertimi;
-                document.getElementById('lblPerforcimi').innerHTML = generated.perforcimi;
-                document.getElementById('lblEvaluation').textContent = generated.evaluation;
-                document.getElementById('lblHomework').textContent = generated.homework;
-            } catch (error) {
-                alert(error.message);
-            } finally {
-                btn.innerHTML = originalBtnText;
-                btn.disabled = false;
-            }
-        }
-
-        clearDocument();
-    </script>
 </body>
 </html>
