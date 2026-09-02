@@ -185,78 +185,11 @@
     </main>
 
     <script>
-        const lessonPlans = [
-            // SHEMBUJ PËR KIMI 10
-            {
-                id: "k10_1",
-                classLevel: "10",
-                subject: "Kimi 10",
-                period: "I",
-                chapter: "Kapitulli 1: Gjendjet e lëndës",
-                topic: "Gjithçka përbëhet nga grimcat",
-                outcomes: [
-                    "Përshkruan përbërjen e lëndës nga grimca të vogla (atome, molekula, jone).",
-                    "Shpjegon diferencat midis gjendjes së ngurtë, të lëngët dhe të gaztë bazuar në teorinë kinetike.",
-                    "Analizon lëvizjen brauniane dhe dukurinë e shpërhapjes (difuzionit)."
-                ],
-                keywords: "Grimca, Teori kinetike, Gjendje e ngurtë, Lëng, Gaz, Difuzion.",
-                resources: "Teksti Kimi 10 (Pegi), cilindër i shkallëzuar, ujë, kristale KMnO4, tabela e zezë/projektor.",
-                evokimi: "Pyeten nxënësit: <i>'Pse era e parfumit apo e ushqimit përhapet në të gjithë dhomën edhe pa pasur rrymë ajri?'</i> Bëhet një stuhi mendimesh mbi strukturën e padukshme të ajrit dhe lëndës.",
-                realizimi: "Mësuesi demonstron tretjen e një kristali KMnO4 në ujë. Nxënësit vërejnë se si ngjyra vjollcë përhapet gradualisht. Shpjegojmë konceptin e <b>Teorisë Kinetike të Grimcave</b>: goditjet e pandërprera, hapësirat ndërmjet grimcave dhe ndikimin e temperaturës në shpejtësinë e lëvizjes.",
-                reflektimi: "Nxënësit plotësojnë një tabelë krahasuese për 3 gjendjet e lëndës (Forma, Vëllimi, Ngjeshshmëria, Lëvizja e grimcave). Diskutohen përgjigjet në grup.",
-                evaluation: "Vlerësim formativ për pjesëmarrjen në diskutim, argumentimin logjik të dukurisë së difuzionit dhe saktësinë në plotësimin e tabelës krahasuese.",
-                homework: "Ushtrimet 1, 2 dhe 3 në faqen 9 të tekstit Kimi 10."
-            },
-            
-            // SHEMBUJ PËR KIMI 11
-            {
-                id: "k11_1",
-                classLevel: "11",
-                subject: "Kimi 11",
-                period: "I",
-                chapter: "Kapitulli 1: Reaksionet Redoks",
-                topic: "Oksidimi dhe reduktimi. Reaksionet redoks",
-                outcomes: [
-                    "Përkufizon konceptet e oksidimit dhe reduktimit në lidhje me transferimin e elektroneve.",
-                    "Identifikon agjentin oksidues dhe agjentin reduktues në një reaksion.",
-                    "Përcakton numrin e oksidimit për elementet në përbërje të ndryshme."
-                ],
-                keywords: "Oksidim, Reduktim, Redoks, Agjent Oksidues, Numër Oksidimi.",
-                resources: "Teksti Kimi 11 (Pegi), Sistem Periodik, fletore pune, markera me ngjyra.",
-                evokimi: "Prezantohet një gozhdë e ndryshkur ose mishi i një molle të prerë pas pak minutash. Pyeten nxënësit: <i>'Çfarë po ndodh nga ana kimike?'</i>",
-                realizimi: "Shpjegohet marrja dhe dhënia e elektroneve. Jepet rregulli mnemonik: Oksidimi është humbje (e elektroneve), Reduktimi është fitim. Mësuesi shkruan në tabelë një reaksion të thjeshtë (p.sh., formimi i NaCl nga Na dhe Cl2) dhe tregon lëvizjen e elektroneve. Përcaktohen rregullat themelore të numrave të oksidimit.",
-                reflektimi: "Ushtrim i drejtuar: Nxënësit në dyshe gjejnë numrat e oksidimit për atomet te H2SO4, KMnO4 dhe K2Cr2O7. Krahasojnë rezultatet.",
-                evaluation: "Vlerësim i përgjigjeve gjatë ushtrimit praktik; aftësia për të zbatuar rregullat e përcaktimit të numrit të oksidimit.",
-                homework: "Detyrë shtëpie: Të gjenden numrat e oksidimit për listën e përbërjeve në fund të faqes 12."
-            },
-
-            // SHEMBUJ PËR KIMI 12
-            {
-                id: "k12_1",
-                classLevel: "12",
-                subject: "Kimi 12",
-                period: "II",
-                chapter: "Kapitulli 10: Kinetika Kimike",
-                topic: "Teoria e goditjeve dhe Energjia e Aktivizimit",
-                outcomes: [
-                    "Përkufizon Kinetikën Kimike dhe shpejtësinë e reaksionit.",
-                    "Shpjegon formimin e kompleksit aktiv dhe nevojën për energji aktivizimi (Ea).",
-                    "Analizon grafikët e energjisë për reaksionet ekzotermike dhe endotermike."
-                ],
-                keywords: "Kinetikë, Goditje efektive, Energji Aktivizimi, Kompleks aktiv, Profil energjitik.",
-                resources: "Teksti Kimi 12 (Pegi), grafiqe të printuara të energjisë, aplikacion interaktiv (PhET) nëse disponohet.",
-                evokimi: "Krahasohet djegia e fletës së letrës me shpërbërjen e plastikës në natyrë. Shtrohet pyetja: <i>'Pse disa reaksione ndodhin në fraksione të sekondës dhe disa kërkojnë vite, edhe pse termodinamikisht janë të mundshme?'</i>",
-                realizimi: "Vizatohet dhe shpjegohet profili energjitik. Theksohet se jo çdo goditje sjell produkt; goditja duhet të ketë orientimin e duhur dhe energjinë minimale (Ea). Demonstrohet diferenca grafike mes reaksioneve që çlirojnë apo thithin nxehtësi.",
-                reflektimi: "Nxënësit analizojnë një grafik të dhënë në dërrasë, duke etiketuar reaktantët, produktet dhe Ea.",
-                evaluation: "Vlerësohet aftësia interpretuese e grafikëve dhe saktësia në dallimin e goditjeve efektive/joefektive.",
-                homework: "Detyrë: Ushtrimi 4, faqe 145 (Analizë grafiku i energjisë)."
-            }
-        ];
-
         const classSelector = document.getElementById('classSelector');
         const subjectSelector = document.getElementById('subjectSelector');
         const topicInput = document.getElementById('topicInput');
 
+        // Këtu është vendosur çelësi i saktë që ofrove
         const GEMINI_API_KEY = "AQ.Ab8RN6LljYFtvv78EKN__jg3VYTd90sAwBAloIcLfXJdQ9WGqA";
 
         function clearDocument() {
@@ -290,6 +223,12 @@
                 return;
             }
 
+            // Ndrysho butonin për t'i treguar përdoruesit që po ngarkohet
+            const btn = document.querySelector('button[onclick="generateWithGemini()"]');
+            const originalBtnText = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Po Gjenerohet...';
+            btn.disabled = true;
+
             const classLevel = classSelector.value;
             const subject = subjectSelector.value;
 
@@ -315,8 +254,9 @@ parashikimi, ndertimi, perforcimi, evaluation, homework.
 `;
 
             try {
+                // Modeli u ndryshua në gemini-1.5-flash
                 const response = await fetch(
-                    "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + GEMINI_API_KEY,
+                    "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + GEMINI_API_KEY,
                     {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
@@ -330,7 +270,12 @@ parashikimi, ndertimi, perforcimi, evaluation, homework.
                     }
                 );
 
-                if (!response.ok) throw new Error("Gemini nuk ktheu pergjigje te vlefshme.");
+                if (!response.ok) {
+                    // Tani kapim gabimin e saktë nga Google për të kuptuar problemin
+                    const errorData = await response.json();
+                    console.error("Gabimi i plotë nga Google:", errorData);
+                    throw new Error(`Gabim nga Google: ${errorData.error.message}`);
+                }
 
                 const result = await response.json();
                 const generated = JSON.parse(result.candidates[0].content.parts[0].text);
@@ -348,6 +293,10 @@ parashikimi, ndertimi, perforcimi, evaluation, homework.
                 document.getElementById('lblHomework').textContent = generated.homework;
             } catch (error) {
                 alert(error.message);
+            } finally {
+                // Rikthe butonin në gjendjen e mëparshme pasi të mbarojë
+                btn.innerHTML = originalBtnText;
+                btn.disabled = false;
             }
         }
 
